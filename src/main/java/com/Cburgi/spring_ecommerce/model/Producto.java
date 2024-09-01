@@ -1,29 +1,41 @@
 package com.Cburgi.spring_ecommerce.model;
 
+import jakarta.persistence.*;
+
+@Entity
+@Table(name="productos")
 public class Producto {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String nombre;
     private String descripcion;
     private String imagen;
     private Double precio;
     private int cantidad;
+    // relations
+    @ManyToOne
+    private Usuario usuario;
+
 
     //constructor
 
     public Producto() {
     }
 
-    public Producto(Long id, String nombre, String descripcion,
-                    String imagen, Double precio, int cantidad) {
+    public Producto(Long id, String nombre,
+                    String descripcion, String imagen, Double precio,
+                    int cantidad, Usuario usuario) {
         this.id = id;
         this.nombre = nombre;
         this.descripcion = descripcion;
         this.imagen = imagen;
         this.precio = precio;
         this.cantidad = cantidad;
+        this.usuario = usuario;
     }
 
-    // Getters and Setters
+// Getters and Setters
 
     public Long getId() {
         return id;
@@ -71,6 +83,14 @@ public class Producto {
 
     public void setCantidad(int cantidad) {
         this.cantidad = cantidad;
+    }
+
+    public Usuario getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
     }
 
     @Override
