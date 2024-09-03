@@ -23,7 +23,7 @@ public class UploadFileService {
         return "dafault.jpg";
     }
 
-    public deleteImage(String nombre){
+    public void deleteImage(String nombre){
         String ruta = "images";
         File file = new File(ruta+nombre);
         file.delete();
