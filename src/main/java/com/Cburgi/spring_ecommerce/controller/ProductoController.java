@@ -48,15 +48,6 @@ public class ProductoController {
             String nombreImagen = uploadFileService.saveImage(file);
             producto.setImagen(nombreImagen);
 
-        }else{
-            if (file.isEmpty()){  //cuando editamos un producto pero no cambiamos la imagen
-                Producto p = new Producto();
-                p=productoService.get(producto.getId()).get();
-                producto.setImagen(p.getImagen());
-            }else{
-                String nombreImagen = uploadFileService.saveImage(file);
-                producto.setImagen(nombreImagen);
-            }
         }
 
         productoService.save(producto);
@@ -127,14 +118,40 @@ public class ProductoController {
     */
 
     @PostMapping("/update")
-    public String update (Producto producto){
+    public String update (Producto producto,@RequestParam("img") MultipartFile file) throws IOException {
+        Producto p = new Producto();
+        p=productoService.get(producto.getId()).get();
+
+
+        if (file.isEmpty()){  //cuando editamos un producto pero no cambiamos la imagen
+            producto.setImagen(p.getImagen());
+
+        }else{  // cuando se edita tmb la imagen
+
+            if (!p.getImagen().equals("default.jpg")){
+
+                uploadFileService.deleteImage(p.getImagen());  //eliminar imagen del server al eliminar el producto
+            }
+
+            String nombreImagen = uploadFileService.saveImage(file);
+            producto.setImagen(nombreImagen);
+        }
+        producto.setUsuario(p.getUsuario());
         productoService.update(producto);
         return "redirect:/productos";
     }
 
     @GetMapping("/delete/{id}")
     public String delete(@PathVariable Long id) {
+        Producto p= new Producto();
+        p=productoService.get(id).get();
+
+        if (!p.getImagen().equals("default.jpg")){
+            uploadFileService.deleteImage(p.getImagen());  //eliminar imagen del server al eliminar el producto
+        }
+
         productoService.delete(id);
+
         return "redirect:/productos";
     }
 
