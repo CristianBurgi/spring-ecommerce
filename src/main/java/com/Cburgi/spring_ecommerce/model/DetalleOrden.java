@@ -35,6 +35,63 @@ public class DetalleOrden {
 
     // Getters and Setters...
 
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    public Double getCantidad() {
+        return cantidad;
+    }
+
+    public void setCantidad(Double cantidad) {
+        this.cantidad = cantidad;
+    }
+
+    public Double getPrecio() {
+        return precio;
+    }
+
+    public void setPrecio(Double precio) {
+        this.precio = precio;
+    }
+
+    public Double getTotal() {
+        return total;
+    }
+
+    public void setTotal(Double total) {
+        this.total = total;
+    }
+
+    public Orden getOrden() {
+        return orden;
+    }
+
+    public void setOrden(Orden orden) {
+        this.orden = orden;
+    }
+
+    public Producto getProducto() {
+        return producto;
+    }
+
+    public void setProducto(Producto producto) {
+        this.producto = producto;
+    }
+
     @Override
     public String toString() {
         return "DetalleOrden{" +
@@ -45,4 +102,7 @@ public class DetalleOrden {
                 ", total=" + total +
                 '}';
     }
+
+
+
 }
