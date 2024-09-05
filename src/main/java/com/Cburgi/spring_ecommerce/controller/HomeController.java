@@ -3,6 +3,8 @@ package com.Cburgi.spring_ecommerce.controller;
 import com.Cburgi.spring_ecommerce.model.DetalleOrden;
 import com.Cburgi.spring_ecommerce.model.Orden;
 import com.Cburgi.spring_ecommerce.model.Producto;
+import com.Cburgi.spring_ecommerce.model.Usuario;
+import com.Cburgi.spring_ecommerce.service.IUsuarioService;
 import com.Cburgi.spring_ecommerce.service.ProductoService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,6 +31,9 @@ public class HomeController {
 
     //datos de la orden
     Orden orden= new Orden();
+
+    @Autowired
+    private IUsuarioService usuarioService;
 
     @GetMapping("")
     public String home(Model model){
@@ -132,7 +137,14 @@ public class HomeController {
     }
 
     @GetMapping("/order")
-    public String order() {
+    public String order(Model model) {
+
+        Usuario usuario = usuarioService.findPorId(1).get();
+
+        model.addAttribute("cart", detalles);
+        model.addAttribute("orden", orden);
+        model.addAttribute("usuario", usuario);
+
 
         return "usuario/resumenorden";
     }
