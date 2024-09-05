@@ -1,9 +1,8 @@
 package com.Cburgi.spring_ecommerce.controller;
 
-import com.Cburgi.spring_ecommerce.model.DetalleOrden;
 import com.Cburgi.spring_ecommerce.model.Producto;
 import com.Cburgi.spring_ecommerce.model.Usuario;
-import com.Cburgi.spring_ecommerce.service.ProductoService;
+import com.Cburgi.spring_ecommerce.service.IProductoService;
 import com.Cburgi.spring_ecommerce.service.UploadFileService;
 import org.slf4j.Logger;
 import org.slf4j.*;
@@ -14,8 +13,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 @Controller
@@ -25,13 +22,13 @@ public class ProductoController {
     private final Logger LOGGER = LoggerFactory.getLogger(ProductoController.class);
 
     @Autowired
-    private ProductoService productoService;
+    private IProductoService IProductoService;
     @Autowired
     private UploadFileService uploadFileService;
 
     @GetMapping("")
     public String show(Model model){
-        model.addAttribute("productos", productoService.findAll());
+        model.addAttribute("productos", IProductoService.findAll());
         return "productos/show";
     }
 
@@ -53,7 +50,7 @@ public class ProductoController {
 
         }
 
-        productoService.save(producto);
+        IProductoService.save(producto);
 
         return "redirect:/productos";
     }
@@ -73,7 +70,7 @@ public class ProductoController {
     @GetMapping("/edit/{id}")
     public String edit(@PathVariable Long id, Model model) {
         // Intenta obtener el producto con el ID proporcionado
-        Optional<Producto> optionalProducto = productoService.get(id);
+        Optional<Producto> optionalProducto = IProductoService.get(id);
 
         // Verifica si el producto está presente
         if (optionalProducto.isPresent()) {
@@ -123,7 +120,7 @@ public class ProductoController {
     @PostMapping("/update")
     public String update (Producto producto,@RequestParam("img") MultipartFile file) throws IOException {
         Producto p = new Producto();
-        p=productoService.get(producto.getId()).get();
+        p= IProductoService.get(producto.getId()).get();
 
 
         if (file.isEmpty()){  //cuando editamos un producto pero no cambiamos la imagen
@@ -140,20 +137,20 @@ public class ProductoController {
             producto.setImagen(nombreImagen);
         }
         producto.setUsuario(p.getUsuario());
-        productoService.update(producto);
+        IProductoService.update(producto);
         return "redirect:/productos";
     }
 
     @GetMapping("/delete/{id}")
     public String delete(@PathVariable Long id) {
         Producto p= new Producto();
-        p=productoService.get(id).get();
+        p= IProductoService.get(id).get();
 
         if (!p.getImagen().equals("default.jpg")){
             uploadFileService.deleteImage(p.getImagen());  //eliminar imagen del server al eliminar el producto
         }
 
-        productoService.delete(id);
+        IProductoService.delete(id);
 
         return "redirect:/productos";
     }

@@ -1,17 +1,17 @@
 package com.Cburgi.spring_ecommerce.service;
 
 import com.Cburgi.spring_ecommerce.model.Producto;
-import com.Cburgi.spring_ecommerce.repository.ProductoRepository;
+import com.Cburgi.spring_ecommerce.repository.IProductoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 @Service
-public class ProductoServiceImpl implements ProductoService{
+public class ProductoServiceImpl implements IProductoService {
 
     @Autowired
-    private ProductoRepository productoRepository;
+    private IProductoRepository productoRepository;
 
     @Override
     public Producto save(Producto producto) {

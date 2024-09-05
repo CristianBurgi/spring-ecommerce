@@ -5,7 +5,7 @@ import com.Cburgi.spring_ecommerce.model.Orden;
 import com.Cburgi.spring_ecommerce.model.Producto;
 import com.Cburgi.spring_ecommerce.model.Usuario;
 import com.Cburgi.spring_ecommerce.service.IUsuarioService;
-import com.Cburgi.spring_ecommerce.service.ProductoService;
+import com.Cburgi.spring_ecommerce.service.IProductoService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +24,7 @@ public class HomeController {
     private final Logger log= LoggerFactory.getLogger(HomeController.class);
 
     @Autowired
-    private ProductoService productoService;
+    private IProductoService IProductoService;
 
     //para almacenar los detalles de la orden
     private List<DetalleOrden> detalles= new ArrayList<DetalleOrden>();
@@ -38,7 +38,7 @@ public class HomeController {
     @GetMapping("")
     public String home(Model model){
 
-        model.addAttribute("productos", productoService.findAll());
+        model.addAttribute("productos", IProductoService.findAll());
         return "usuario/home";
     }
 
@@ -47,7 +47,7 @@ public class HomeController {
         log.info("Id enviado cpmp párametro {}", id);
 
         Producto producto = new Producto();
-        Optional<Producto> optionalProducto = productoService.get(id);
+        Optional<Producto> optionalProducto = IProductoService.get(id);
         producto = optionalProducto.get();
         model.addAttribute("producto", producto);  // se pasa el producto al modelo para mostrarlo en la vista
 
@@ -61,7 +61,7 @@ public class HomeController {
         Producto producto = new Producto();
         double sumaTotal = 0;
 
-        Optional<Producto> optionalProducto = productoService.get(id);
+        Optional<Producto> optionalProducto = IProductoService.get(id);
         log.info("Producto añadido : {}", optionalProducto.get());
         log.info("Cantidad: {}", cantidad);
 
