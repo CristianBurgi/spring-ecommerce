@@ -1,5 +1,6 @@
 package com.Cburgi.spring_ecommerce.controller;
 
+import com.Cburgi.spring_ecommerce.model.DetalleOrden;
 import com.Cburgi.spring_ecommerce.model.Producto;
 import com.Cburgi.spring_ecommerce.model.Usuario;
 import com.Cburgi.spring_ecommerce.service.ProductoService;
@@ -13,6 +14,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Controller
@@ -154,6 +157,8 @@ public class ProductoController {
 
         return "redirect:/productos";
     }
+
+
 
 }
 
