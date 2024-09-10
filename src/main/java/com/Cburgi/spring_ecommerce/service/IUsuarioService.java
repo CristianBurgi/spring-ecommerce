@@ -9,5 +9,6 @@ public interface IUsuarioService {
     // Por ejemplo: guardar, actualizar, eliminar, etc.
     Optional<Usuario> findPorId(Integer id);
     Usuario save (Usuario usuario);
+    Optional<Usuario> findByEmail(String email);
 
 }
