@@ -91,4 +91,7 @@ public class Orden {
                 ", total=" + total +
                 '}';
     }
+
+    public void set(Date fechaCreacion) {
+    }
 }

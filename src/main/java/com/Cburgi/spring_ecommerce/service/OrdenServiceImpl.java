@@ -27,20 +27,24 @@ public class OrdenServiceImpl implements IOrdenService {
     public String generaNumeroOrden(){
         int numero = 0;
         String numeroConcatenado = "";
-        //Obtener el ultimo numero de orden
 
+        //Obtener el ultimo numero de orden
         List<Orden> ordenes = findAll();
 
         List<Integer> numeros = new ArrayList<Integer>();
+
         ordenes.stream().forEach(orden ->numeros.add(Integer.parseInt(orden.getNumero())) );
 
         if (ordenes.isEmpty()){
             numero = 1;
-
         }else{
             numero = Collections.max(numeros);
             numero++;
         }
+
+
+        //revisar esto por las dudas este dando error
+        
 
         //Convertir numero a String con formato 000000000
         numeroConcatenado = String.format("%09d", numero);

@@ -4,6 +4,8 @@ import com.Cburgi.spring_ecommerce.model.DetalleOrden;
 import com.Cburgi.spring_ecommerce.model.Orden;
 import com.Cburgi.spring_ecommerce.model.Producto;
 import com.Cburgi.spring_ecommerce.model.Usuario;
+import com.Cburgi.spring_ecommerce.service.IDetalleOrdenService;
+import com.Cburgi.spring_ecommerce.service.IOrdenService;
 import com.Cburgi.spring_ecommerce.service.IUsuarioService;
 import com.Cburgi.spring_ecommerce.service.IProductoService;
 import org.slf4j.Logger;
@@ -14,8 +16,10 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/")
@@ -34,6 +38,15 @@ public class HomeController {
 
     @Autowired
     private IUsuarioService usuarioService;
+
+    @Autowired
+    private IOrdenService ordenService;
+
+    @Autowired
+    private IDetalleOrdenService detalleOrdenService;
+
+
+    //Metodos......................
 
     @GetMapping("")
     public String home(Model model){
@@ -147,6 +160,47 @@ public class HomeController {
 
 
         return "usuario/resumenorden";
+    }
+
+
+    //Metodo para guardar la orden
+    @GetMapping("/saveOrder")
+    public String saveOrder(){
+        Date fechaCreacion = new Date();
+        orden.setFechaCreacion(fechaCreacion);
+        orden.setNumero(ordenService.generaNumeroOrden());
+
+        // setear usuario
+        Usuario usuario = usuarioService.findPorId(1).get();
+        orden.setUsuario(usuario);
+
+        // guardar orden
+        ordenService.save(orden);
+
+        // guardar detalles de la orden
+        for (DetalleOrden detalleOrden: detalles){
+            detalleOrden.setOrden(orden);
+            detalleOrdenService.save(detalleOrden);
+        }
+
+        // vaciar carrito
+        detalles = new ArrayList<>();
+        orden.setTotal(0.0);
+
+        log.info("Orden guardada con éxito");
+
+        return "redirect:/";
+
+    }
+
+    @PostMapping("/search")
+    public String searchProduct(@RequestParam String nombre, Model model){
+        log.info("nombre del producto : {}", nombre);
+        List<Producto> productos = IProductoService.findAll().stream().
+                filter(p -> p.getNombre().toLowerCase().contains(nombre.toLowerCase()))
+               .collect(Collectors.toList());
+        model.addAttribute("productos", productos);
+        return "usuario/home";
     }
 
 
