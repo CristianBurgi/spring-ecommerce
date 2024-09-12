@@ -1,6 +1,7 @@
 package com.Cburgi.spring_ecommerce.service;
 
 import com.Cburgi.spring_ecommerce.model.Orden;
+import com.Cburgi.spring_ecommerce.model.Usuario;
 import com.Cburgi.spring_ecommerce.repository.IOrdenRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -53,5 +54,10 @@ public class OrdenServiceImpl implements IOrdenService {
 
         //Devolver el numero concatenado con el prefijo "000000"
         return numeroConcatenado;
+    }
+
+    @Override
+    public List<Orden> findByUsuario(Usuario usuario) {
+        return ordenRepository.findByUsuario(usuario);
     }
 }
