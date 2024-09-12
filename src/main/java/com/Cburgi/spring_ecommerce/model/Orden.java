@@ -3,6 +3,7 @@ package com.Cburgi.spring_ecommerce.model;
 import jakarta.persistence.*;
 
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "ordenes")
@@ -16,15 +17,15 @@ public class Orden {
     private double total;
     @ManyToOne
     private Usuario usuario;
-    @OneToOne(mappedBy = "orden")
-    private DetalleOrden detalle;
+    @OneToMany(mappedBy = "orden")
+    private List<DetalleOrden> detalle;
 
     public Orden() {
     }
 
-    public Orden(Long id, String numero, Date fechaCreacion,
+    public Orden( String numero, Date fechaCreacion,
                  Date fechaRecibida, double total) {
-        this.id = id;
+
         this.numero = numero;
         this.fechaCreacion = fechaCreacion;
         this.fechaRecibida = fechaRecibida;
@@ -33,13 +34,7 @@ public class Orden {
 
     // Getters and setters...
 
-    public Long getId() {
-        return id;
-    }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     public String getNumero() {
         return numero;
@@ -79,6 +74,14 @@ public class Orden {
 
     public void setUsuario(Usuario usuario) {
         this.usuario = usuario;
+    }
+
+    public List<DetalleOrden> getDetalle() {
+        return detalle;
+    }
+
+    public void setDetalle(List<DetalleOrden> detalle) {
+        this.detalle = detalle;
     }
 
     @Override

@@ -16,7 +16,7 @@ public class DetalleOrden {
     private Double cantidad;
     private Double precio;
     private Double total;
-    @OneToOne
+    @ManyToOne
     private Orden orden;
     @ManyToOne
     private Producto producto;

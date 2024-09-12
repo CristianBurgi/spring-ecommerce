@@ -8,6 +8,7 @@ import com.Cburgi.spring_ecommerce.service.IDetalleOrdenService;
 import com.Cburgi.spring_ecommerce.service.IOrdenService;
 import com.Cburgi.spring_ecommerce.service.IUsuarioService;
 import com.Cburgi.spring_ecommerce.service.IProductoService;
+import jakarta.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,9 +50,11 @@ public class HomeController {
     //Metodos......................
 
     @GetMapping("")
-    public String home(Model model){
+    public String home(Model model, HttpSession session){
 
+        log.info("Home con sesion activa usuario {}",session.getAttribute("idusuario"));
         model.addAttribute("productos", IProductoService.findAll());
+
         return "usuario/home";
     }
 
@@ -150,9 +153,9 @@ public class HomeController {
     }
 
     @GetMapping("/order")
-    public String order(Model model) {
+    public String order(Model model, HttpSession session) {
 
-        Usuario usuario = usuarioService.findPorId(1).get();
+        Usuario usuario = usuarioService.findPorId(Integer.parseInt(session.getAttribute("idusuario").toString())).get();
 
         model.addAttribute("cart", detalles);
         model.addAttribute("orden", orden);
@@ -165,33 +168,42 @@ public class HomeController {
 
     //Metodo para guardar la orden
     @GetMapping("/saveOrder")
-    public String saveOrder(){
-        Date fechaCreacion = new Date();
-        orden.setFechaCreacion(fechaCreacion);
-        orden.setNumero(ordenService.generaNumeroOrden());
+    public String saveOrder(HttpSession session) {
+        try {
+            // Crear una nueva instancia de Orden
+            Orden orden = new Orden();
+            Date fechaCreacion = new Date();
+            orden.setFechaCreacion(fechaCreacion);
+            orden.setNumero(ordenService.generaNumeroOrden());
 
-        // setear usuario
-        Usuario usuario = usuarioService.findPorId(1).get();
-        orden.setUsuario(usuario);
+            // Obtener y setear usuario
+            Usuario usuario = usuarioService.findPorId(Integer.parseInt(session.getAttribute("idusuario").toString())).orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+            orden.setUsuario(usuario);
 
-        // guardar orden
-        ordenService.save(orden);
+            // Guardar orden
+            ordenService.save(orden);
 
-        // guardar detalles de la orden
-        for (DetalleOrden detalleOrden: detalles){
-            detalleOrden.setOrden(orden);
-            detalleOrdenService.save(detalleOrden);
+            // Guardar detalles de la orden
+            for (DetalleOrden detalleOrden : detalles) {
+                detalleOrden.setOrden(orden);
+                detalleOrdenService.save(detalleOrden);
+            }
+
+            // Vaciar carrito
+            detalles.clear();
+            orden.setTotal(0.0);
+
+            log.info("Orden guardada con éxito");
+
+        } catch (Exception e) {
+            log.error("Error al guardar la orden", e);
+            return "error"; // Redirige a una página de error o muestra un mensaje adecuado
         }
 
-        // vaciar carrito
-        detalles = new ArrayList<>();
-        orden.setTotal(0.0);
-
-        log.info("Orden guardada con éxito");
-
         return "redirect:/";
-
     }
+
+
 
     @PostMapping("/search")
     public String searchProduct(@RequestParam String nombre, Model model){

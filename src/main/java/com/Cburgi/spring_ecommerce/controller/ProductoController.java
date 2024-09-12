@@ -3,7 +3,9 @@ package com.Cburgi.spring_ecommerce.controller;
 import com.Cburgi.spring_ecommerce.model.Producto;
 import com.Cburgi.spring_ecommerce.model.Usuario;
 import com.Cburgi.spring_ecommerce.service.IProductoService;
+import com.Cburgi.spring_ecommerce.service.IUsuarioService;
 import com.Cburgi.spring_ecommerce.service.UploadFileService;
+import jakarta.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +27,8 @@ public class ProductoController {
     private IProductoService IProductoService;
     @Autowired
     private UploadFileService uploadFileService;
+    @Autowired
+    private IUsuarioService usuarioService;
 
     @GetMapping("")
     public String show(Model model){
@@ -38,9 +42,11 @@ public class ProductoController {
     }
 
     @PostMapping("/save")
-    public String save(Producto producto,@RequestParam("img") MultipartFile file) throws IOException {
+    public String save(Producto producto, @RequestParam("img") MultipartFile file, HttpSession session) throws IOException {
         LOGGER.info("Guardando producto: {}", producto);
-        Usuario usuario = new Usuario(1,"","","","","","","");
+
+
+        Usuario usuario = usuarioService.findPorId(Integer.parseInt(session.getAttribute("idusuario").toString())).get();
         producto.setUsuario(usuario);
 
         //imagen
