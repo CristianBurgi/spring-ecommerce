@@ -176,7 +176,7 @@ public class HomeController {
     public String saveOrder(HttpSession session) {
         try {
             // Crear una nueva instancia de Orden
-            Orden orden = new Orden();
+
             Date fechaCreacion = new Date();
             orden.setFechaCreacion(fechaCreacion);
             orden.setNumero(ordenService.generaNumeroOrden());
@@ -194,9 +194,12 @@ public class HomeController {
                 detalleOrdenService.save(detalleOrden);
             }
 
+            //limpiar
+            Orden orden = new Orden();
+
             // Vaciar carrito
             detalles.clear();
-            orden.setTotal(0.0);
+
 
             log.info("Orden guardada con éxito");
 
