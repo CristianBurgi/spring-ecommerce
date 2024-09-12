@@ -95,12 +95,14 @@ public class UsuarioController {
         //session
         model.addAttribute("sesion",session.getAttribute("idusuario"));
 
-
-
-
-
         return "usuario/detalleCompra";
 
+    }
+
+    @GetMapping("/logout")
+    public String logout(HttpSession session) {
+        session.removeAttribute("idusuario");
+        return "redirect:/";
     }
 
 }
