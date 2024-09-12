@@ -42,10 +42,8 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarResponsive">
           <ul class="navbar-nav ml-auto">
-            <li class="nav-item"><a class="nav-link"
-                                    th:href="@{/getCart}">Carrito</a></li>
-            <li class="nav-item"><a class="nav-link"
-                                    th:href="@{/usuario/login}">Login</a></li>
+            <li class="nav-item"><a class="nav-link" th:href="@{/getCart}">Carrito</a></li>
+            <li class="nav-item"><a class="nav-link" th:href="@{/usuario/login}">Login</a></li>
           </ul>
         </div>
       </div>
@@ -80,6 +78,7 @@
                     aria-haspopup="true" aria-expanded="false"> USER </a>
               <div class="dropdown-menu"
                    aria-labelledby="navbarDropdownMenuLink">
+                <a class="dropdown-item" th:href="@{/usuario/compras}">Compras</a>
                 <a class="dropdown-item" th:href="@{/getCart}">Carrito</a>
               </div></li>
           </ul>
